@@ -1,9 +1,9 @@
 # These are supported funding model platforms
 
-praveencs87: # Replace with up to 4 GitHub Sponsors-enabled usernames e.g., [user1, user2]
-PraveenCS: # Replace with a single Patreon username
-praveen-cs: # Replace with a single Open Collective username
-praveencs: # Replace with a single Ko-fi username
-praveencs: # Replace with a single Liberapay username
-praveencs: # Replace with a single Buy Me a Coffee username
-praveencs87: # Replace with a single thanks.dev username
+github: praveencs87: # Replace with up to 4 GitHub Sponsors-enabled usernames e.g., [user1, user2]
+patreon: PraveenCS: # Replace with a single Patreon username
+open_collective: praveen-cs: # Replace with a single Open Collective username
+ko_fi: praveencs: # Replace with a single Ko-fi username
+liberapay: praveencs: # Replace with a single Liberapay username
+buy_me_a_coffee: praveencs: # Replace with a single Buy Me a Coffee username
+thanks_dev:  u/gh/praveencs87: # Replace with a single thanks.dev username
