@@ -6,8 +6,8 @@ import { PropsWithChildren, Suspense } from 'react';
 import { getURL } from '@/utils/helpers';
 import 'styles/main.css';
 
-const title = 'Next.js Subscription Starter';
-const description = 'Brought to you by Vercel, Stripe, and Supabase.';
+const title = 'PayBridge - A Micro Service for Payments';
+const description = 'An open-source microservice for payments.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(getURL()),
