@@ -1,7 +1,7 @@
 // pages/api/razorpay/create-order.ts
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { createRazorpayOrder } from '@/utils/razorpay/server';
+import { createRazorpayOrder } from '@/core/payments/adapters/razorpay/server';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {

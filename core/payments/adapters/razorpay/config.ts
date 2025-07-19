@@ -1,4 +1,4 @@
-// utils/razorpay/config.ts
+// core/payments/adapters/razorpay/config.ts
 
 import Razorpay from 'razorpay';
 

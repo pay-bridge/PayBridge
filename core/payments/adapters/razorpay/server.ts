@@ -1,12 +1,13 @@
-// utils/razorpay/server.ts
+// core/payments/adapters/razorpay/server.ts
 
 import razorpayInstance from './config';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { createClient } from '@/utils/supabase/server';
-import { createOrRetrieveCustomer } from '@/utils/supabase/admin';
-import { getURL, getErrorRedirect, calculateTrialEndUnixTimestamp } from '@/utils/helpers';
-import { Tables } from '@/types_db';
+import { createClient } from '@/core/users/supabase/server';
+import { createOrRetrieveCustomer } from '@/core/users/supabase/admin';
+import { getURL, getErrorRedirect, calculateTrialEndUnixTimestamp } from '@/core/helpers';
+import { Tables } from '@/core/types_db';
 import crypto from 'crypto';
+import { saveTransaction } from '@/core/payments/transactions';
 
 type Price = Tables<'prices'>;
 
@@ -113,7 +114,23 @@ export async function handleRazorpayWebhook(req: NextApiRequest, res: NextApiRes
   switch (event.event) {
     case 'payment.captured':
       const payment = event.payload.payment.entity;
-      // TODO: Update your database, activate subscriptions, etc.
+      try {
+        await saveTransaction({
+          id: payment.id,
+          gateway: 'razorpay',
+          gateway_transaction_id: payment.id,
+          user_id: payment.notes?.user_id || undefined, // If you store user_id in notes
+          subscription_id: payment.notes?.subscription_id || undefined, // If you store subscription_id in notes
+          amount: payment.amount?.toString(),
+          currency: payment.currency,
+          status: payment.status,
+          type: 'payment',
+          raw: payment
+        });
+      } catch (err) {
+        console.error('[Razorpay] Failed to save transaction:', err);
+      }
+      // TODO: Activate subscriptions, etc.
       break;
     // Handle other event types as needed
     default:

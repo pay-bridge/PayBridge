@@ -1,8 +1,8 @@
-import { toDateTime } from '@/utils/helpers';
-import { stripe } from '@/utils/stripe/config';
+import { toDateTime } from '@/core/helpers';
+import { stripe } from '@/core/payments/adapters/stripe/config';
 import { createClient } from '@supabase/supabase-js';
 import Stripe from 'stripe';
-import type { Database, Tables, TablesInsert } from 'types_db';
+import type { Database, Tables, TablesInsert } from 'core/types_db';
 
 type Product = Tables<'products'>;
 type Price = Tables<'prices'>;

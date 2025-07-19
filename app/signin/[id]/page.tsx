@@ -1,5 +1,5 @@
 import Logo from '@/components/icons/Logo';
-import { createClient } from '@/utils/supabase/server';
+import { createClient } from '@/core/users/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import {
@@ -7,7 +7,7 @@ import {
   getViewTypes,
   getDefaultSignInView,
   getRedirectMethod
-} from '@/utils/auth-helpers/settings';
+} from '@/core/users/auth-helpers/settings';
 import Card from '@/components/ui/Card';
 import PasswordSignIn from '@/components/ui/AuthForms/PasswordSignIn';
 import EmailSignIn from '@/components/ui/AuthForms/EmailSignIn';

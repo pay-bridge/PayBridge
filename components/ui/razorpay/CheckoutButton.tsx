@@ -1,7 +1,7 @@
 // CheckoutButton.tsx
 
 import { useState } from 'react';
-import { initiateRazorpayPayment } from '@/utils/razorpay/client';
+import { initiateRazorpayPayment } from '@/core/payments/adapters/razorpay/client';
 
 const CheckoutButton = ({ priceId, redirectPath }: { priceId: string; redirectPath?: string }) => {
   const [loading, setLoading] = useState(false);

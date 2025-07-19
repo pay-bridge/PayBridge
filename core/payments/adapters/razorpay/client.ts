@@ -1,4 +1,4 @@
-// utils/razorpay/client.ts
+// core/payments/adapters/razorpay/client.ts
 
 import { loadScript } from '@stripe/stripe-js'; // Alternatively, use a custom script loader
 import { RazorpayOptions } from 'razorpay';

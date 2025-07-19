@@ -1,7 +1,7 @@
 // api/razorpay/verify-payment.ts
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { verifyRazorpaySignature } from '@/utils/razorpay/server';
+import { verifyRazorpaySignature } from '@/core/payments/adapters/razorpay/server';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
