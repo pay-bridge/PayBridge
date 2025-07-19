@@ -25,4 +25,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: pay-bridge/paybridge:latest 
+          tags: pay-bridge/paybridge:latest
+          build-args: |
+            NEXT_PUBLIC_SUPABASE_URL=dummy
+            NEXT_PUBLIC_SUPABASE_ANON_KEY=dummy
+            SUPABASE_SERVICE_ROLE_KEY=dummy 
