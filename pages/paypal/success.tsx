@@ -1,9 +1,12 @@
+'use client';
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function PayPalSuccessPage() {
   const searchParams = useSearchParams();
-  const orderId = searchParams.get('token');
+  const orderId = searchParams?.get('token');
   const [status, setStatus] = useState<'pending' | 'success' | 'error'>('pending');
   const [message, setMessage] = useState('');
 

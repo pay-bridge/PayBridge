@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+const isPayPalEnabled = !!process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID && !!process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
+
 interface PayPalCheckoutButtonProps {
   amount: string;
   currency?: string;
@@ -10,6 +12,8 @@ interface PayPalCheckoutButtonProps {
 const PayPalCheckoutButton: React.FC<PayPalCheckoutButtonProps> = ({ amount, currency = 'USD', returnUrl, cancelUrl }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  if (!isPayPalEnabled) return null;
 
   const handleCheckout = async () => {
     setLoading(true);

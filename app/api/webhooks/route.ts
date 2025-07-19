@@ -101,8 +101,8 @@ export async function POST(req: Request) {
                 user_id: checkoutSession.customer as string,
                 subscription_id: subscriptionId as string,
                 amount: checkoutSession.amount_total?.toString(),
-                currency: checkoutSession.currency,
-                status: checkoutSession.status,
+                currency: checkoutSession.currency || undefined,
+                status: checkoutSession.status || undefined,
                 type: 'checkout',
                 raw: checkoutSession
               });

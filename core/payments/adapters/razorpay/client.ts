@@ -1,26 +1,25 @@
 // core/payments/adapters/razorpay/client.ts
 
-import { loadScript } from '@stripe/stripe-js'; // Alternatively, use a custom script loader
-import { RazorpayOptions } from 'razorpay';
+// Custom loader for Razorpay script
+export function loadRazorpayScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (typeof window === 'undefined') return reject('Not in browser');
+    if (document.getElementById('razorpay-sdk')) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.id = 'razorpay-sdk';
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load Razorpay SDK'));
+    document.body.appendChild(script);
+  });
+}
 
-let razorpayScriptPromise: Promise<void> | null = null;
-
-export const loadRazorpayScript = () => {
-  if (!razorpayScriptPromise) {
-    razorpayScriptPromise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error('Razorpay SDK failed to load.'));
-      document.body.appendChild(script);
-    });
-  }
-  return razorpayScriptPromise;
-};
-
-export const initiateRazorpayPayment = async (options: RazorpayOptions) => {
+export const initiateRazorpayPayment = async (options: any) => {
   await loadRazorpayScript();
-
-  const razorpay = new (window as any).Razorpay(options);
-  razorpay.open();
+  // @ts-ignore
+  const rzp = new window.Razorpay(options);
+  rzp.open();
 };

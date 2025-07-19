@@ -138,7 +138,7 @@ export class SQLiteClient implements DatabaseClient {
 
   private async getUserById(userId: string): Promise<any> {
     const stmt = this.db.prepare('SELECT * FROM users WHERE id = ?');
-    const user = stmt.get(userId);
+    const user = stmt.get(userId) as any;
     
     if (user) {
       return {
@@ -190,7 +190,7 @@ export class SQLiteClient implements DatabaseClient {
   // Product operations
   async getProducts(): Promise<any[]> {
     const stmt = this.db.prepare('SELECT * FROM products WHERE active = true');
-    const products = stmt.all();
+    const products = stmt.all() as any[];
     
     return products.map(product => ({
       ...product,
@@ -200,7 +200,7 @@ export class SQLiteClient implements DatabaseClient {
 
   async getProduct(productId: string): Promise<any> {
     const stmt = this.db.prepare('SELECT * FROM products WHERE id = ?');
-    const product = stmt.get(productId);
+    const product = stmt.get(productId) as any;
     
     if (product) {
       return {
@@ -256,7 +256,7 @@ export class SQLiteClient implements DatabaseClient {
   // Price operations
   async getPrices(): Promise<any[]> {
     const stmt = this.db.prepare('SELECT * FROM prices WHERE active = true');
-    const prices = stmt.all();
+    const prices = stmt.all() as any[];
     
     return prices.map(price => ({
       ...price,
@@ -266,7 +266,7 @@ export class SQLiteClient implements DatabaseClient {
 
   async getPrice(priceId: string): Promise<any> {
     const stmt = this.db.prepare('SELECT * FROM prices WHERE id = ?');
-    const price = stmt.get(priceId);
+    const price = stmt.get(priceId) as any;
     
     if (price) {
       return {
@@ -338,21 +338,21 @@ export class SQLiteClient implements DatabaseClient {
       WHERE s.user_id = ? AND s.status IN ('trialing', 'active')
     `);
     
-    const subscription = stmt.get(userId);
+    const subscription = stmt.get(userId) as any;
     
     if (subscription) {
       return {
-        ...subscription,
-        metadata: subscription.metadata ? JSON.parse(subscription.metadata) : null,
+        ...(subscription as any),
+        metadata: (subscription as any).metadata ? JSON.parse((subscription as any).metadata) : null,
         prices: {
-          ...subscription,
-          metadata: subscription.metadata ? JSON.parse(subscription.metadata) : null,
+          ...(subscription as any),
+          metadata: (subscription as any).metadata ? JSON.parse((subscription as any).metadata) : null,
           products: {
-            id: subscription.product_id,
-            name: subscription.product_name,
-            description: subscription.product_description,
-            image: subscription.product_image,
-            metadata: subscription.product_metadata ? JSON.parse(subscription.product_metadata) : null
+            id: (subscription as any).product_id,
+            name: (subscription as any).product_name,
+            description: (subscription as any).product_description,
+            image: (subscription as any).product_image,
+            metadata: (subscription as any).product_metadata ? JSON.parse((subscription as any).product_metadata) : null
           }
         }
       };
@@ -362,11 +362,11 @@ export class SQLiteClient implements DatabaseClient {
 
   async getSubscriptions(): Promise<any[]> {
     const stmt = this.db.prepare('SELECT * FROM subscriptions');
-    const subscriptions = stmt.all();
+    const subscriptions = stmt.all() as any[];
     
     return subscriptions.map(subscription => ({
-      ...subscription,
-      metadata: subscription.metadata ? JSON.parse(subscription.metadata) : null
+      ...(subscription as any),
+      metadata: (subscription as any).metadata ? JSON.parse((subscription as any).metadata) : null
     }));
   }
 
@@ -428,8 +428,8 @@ export class SQLiteClient implements DatabaseClient {
     
     if (subscription) {
       return {
-        ...subscription,
-        metadata: subscription.metadata ? JSON.parse(subscription.metadata) : null
+        ...(subscription as any),
+        metadata: (subscription as any).metadata ? JSON.parse((subscription as any).metadata) : null
       };
     }
     return null;
@@ -478,7 +478,7 @@ export class SQLiteClient implements DatabaseClient {
     }
     
     // Create new session
-    const sessionId = createHash('sha256').update(user.id + Date.now()).digest('hex');
+    const sessionId = createHash('sha256').update((user as any).id + Date.now()).digest('hex');
     const accessToken = createHash('sha256').update(sessionId).digest('hex');
     
     const sessionStmt = this.db.prepare(`
@@ -486,7 +486,7 @@ export class SQLiteClient implements DatabaseClient {
       VALUES (?, ?, ?, datetime('now', '+7 days'))
     `);
     
-    sessionStmt.run(sessionId, user.id, accessToken);
+    sessionStmt.run(sessionId, (user as any).id, accessToken);
     
     return { user, session: { id: sessionId, access_token: accessToken } };
   }

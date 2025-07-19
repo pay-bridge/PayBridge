@@ -24,8 +24,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           id: capture.id,
           gateway: 'paypal',
           gateway_transaction_id: capture.id,
-          user_id: null, // Optionally link to user if available
-          subscription_id: null, // Optionally link to subscription if available
+          user_id: undefined, // Optionally link to user if available
+          subscription_id: undefined, // Optionally link to subscription if available
           amount: capture.amount?.value,
           currency: capture.amount?.currency_code,
           status: capture.status,

@@ -41,7 +41,7 @@ export async function createRazorpayOrder(
     // Retrieve or create the customer in your database if needed
     // For Razorpay, customer management is typically handled via your own system
 
-    const amount = price.amount * 100; // Razorpay expects amount in paise
+    const amount = (price.unit_amount || 0) * 100; // Razorpay expects amount in paise
     const currency = price.currency ?? 'INR';
     const receipt = `receipt_order_${user.id}_${Date.now()}`;
 
@@ -49,10 +49,11 @@ export async function createRazorpayOrder(
       amount,
       currency,
       receipt,
+      // @ts-ignore
       payment_capture: 1 // 1 for automatic capture, 0 for manual
-    });
+    }) as any;
 
-    return { orderId: order.id };
+    return { orderId: order?.id };
   } catch (error) {
     if (error instanceof Error) {
       return {

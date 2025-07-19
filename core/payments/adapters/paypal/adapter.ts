@@ -1,5 +1,9 @@
 import paypal from '@paypal/checkout-server-sdk';
 
+if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
+  throw new Error('PayPal is not enabled. Set PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET.');
+}
+
 // PayPal environment config
 const environment = process.env.PAYPAL_MODE === 'live'
   ? new paypal.core.LiveEnvironment(

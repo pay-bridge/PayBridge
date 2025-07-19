@@ -94,7 +94,7 @@ async function exampleWithErrorHandling() {
     const product = await db.getProduct('non_existent_id');
     console.log('Product found:', product);
   } catch (error) {
-    console.log('❌ Error getting product:', error.message);
+    console.log('❌ Error getting product:', (error as any).message);
   }
   
   try {
@@ -108,7 +108,7 @@ async function exampleWithErrorHandling() {
       metadata: null
     });
   } catch (error) {
-    console.log('❌ Error creating product:', error.message);
+    console.log('❌ Error creating product:', (error as any).message);
   }
 }
 
