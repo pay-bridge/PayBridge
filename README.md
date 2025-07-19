@@ -142,6 +142,38 @@ PayBridge/
 
 ---
 
+## 🐳 Docker Usage
+
+You can run PayBridge and a PostgreSQL database locally using Docker and Docker Compose.
+
+### 1. Build the Docker image
+
+```bash
+docker-compose build
+```
+
+### 2. Start the app and database
+
+```bash
+docker-compose up
+```
+
+- The app will be available at [http://localhost:3000](http://localhost:3000)
+- The database will be available at `localhost:5432` (user: `postgres`, password: `postgres`, db: `paybridge`)
+
+### 3. Environment Variables
+
+- Copy `env.example` to `.env.local` and configure as needed.
+- Docker Compose will automatically use `.env.local` for environment variables.
+
+### 4. Stopping the Containers
+
+```bash
+docker-compose down
+```
+
+---
+
 ## Configuration
 
 Copy the example environment file and configure your settings:
