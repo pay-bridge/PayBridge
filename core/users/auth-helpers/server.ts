@@ -45,6 +45,7 @@ export async function signInWithEmail(formData: FormData) {
       'Invalid email address.',
       'Please try again.'
     );
+    return redirectPath; // Return early if invalid email
   }
 
   const supabase = createClient();
@@ -99,6 +100,7 @@ export async function requestPasswordUpdate(formData: FormData) {
       'Invalid email address.',
       'Please try again.'
     );
+    return redirectPath; // Return early if invalid email
   }
 
   const supabase = createClient();
@@ -176,6 +178,7 @@ export async function signUp(formData: FormData) {
       'Invalid email address.',
       'Please try again.'
     );
+    return redirectPath; // Return early if invalid email
   }
 
   const supabase = createClient();
@@ -234,6 +237,7 @@ export async function updatePassword(formData: FormData) {
       'Your password could not be updated.',
       'Passwords do not match.'
     );
+    return redirectPath; // Return early if passwords do not match
   }
 
   const supabase = createClient();
@@ -274,7 +278,7 @@ export async function updateEmail(formData: FormData) {
       '/account',
       'Your email could not be updated.',
       'Invalid email address.'
-    );
+    ); // Return early if invalid email
   }
 
   const supabase = createClient();
