@@ -3,7 +3,7 @@ import Footer from '@/components/ui/Footer';
 import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
 import { PropsWithChildren, Suspense } from 'react';
-import { getURL } from '@/utils/helpers';
+import { getURL } from '@/core/helpers';
 import 'styles/main.css';
 
 const title = 'PayBridge - A Micro Service for Payments';

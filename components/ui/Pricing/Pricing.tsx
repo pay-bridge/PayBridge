@@ -2,14 +2,15 @@
 
 import Button from '@/components/ui/Button';
 import LogoCloud from '@/components/ui/LogoCloud';
-import type { Tables } from '@/types_db';
-import { getStripe } from '@/utils/stripe/client';
-import { checkoutWithStripe } from '@/utils/stripe/server';
-import { getErrorRedirect } from '@/utils/helpers';
+import type { Tables } from '@/core/types_db';
+import { getStripe } from '@/core/payments/adapters/stripe/client';
+import { checkoutWithStripe } from '@/core/payments/adapters/stripe/server';
+import { getErrorRedirect } from '@/core/helpers';
 import { User } from '@supabase/supabase-js';
 import cn from 'classnames';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
+import PayPalCheckoutButton from '@/components/ui/paypal/CheckoutButton';
 
 type Subscription = Tables<'subscriptions'>;
 type Product = Tables<'products'>;
@@ -56,7 +57,7 @@ export default function Pricing({ user, products, subscription }: Props) {
 
     const { errorRedirect, sessionId } = await checkoutWithStripe(
       price,
-      currentPath
+      currentPath || undefined
     );
 
     if (errorRedirect) {
@@ -68,7 +69,7 @@ export default function Pricing({ user, products, subscription }: Props) {
       setPriceIdLoading(undefined);
       return router.push(
         getErrorRedirect(
-          currentPath,
+          currentPath || '',
           'An unknown error occurred.',
           'Please try again later or contact a system administrator.'
         )
@@ -191,6 +192,15 @@ export default function Pricing({ user, products, subscription }: Props) {
                     >
                       {subscription ? 'Manage' : 'Subscribe'}
                     </Button>
+                    {/* PayPal Button */}
+                    <div className="mt-4">
+                      <PayPalCheckoutButton
+                        amount={((price?.unit_amount || 0) / 100).toFixed(2)}
+                        currency={price.currency || 'USD'}
+                        returnUrl={typeof window !== 'undefined' ? `${window.location.origin}/paypal/success` : '/paypal/success'}
+                        cancelUrl={typeof window !== 'undefined' ? `${window.location.origin}/paypal/cancel` : '/paypal/cancel'}
+                      />
+                    </div>
                   </div>
                 </div>
               );

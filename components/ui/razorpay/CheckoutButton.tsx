@@ -1,7 +1,7 @@
 // CheckoutButton.tsx
 
 import { useState } from 'react';
-import { initiateRazorpayPayment } from '@/utils/razorpay/client';
+import { initiateRazorpayPayment } from '@/core/payments/adapters/razorpay/client';
 
 const CheckoutButton = ({ priceId, redirectPath }: { priceId: string; redirectPath?: string }) => {
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ const CheckoutButton = ({ priceId, redirectPath }: { priceId: string; redirectPa
       if (data.orderId) {
         const options = {
           key: data.key, // Enter the Key ID generated from the Dashboard
-          amount: /* amount from price */, // Amount is in currency subunits. Default currency is INR.
+          amount: 100, // Example: 100 paise = ₹1.00
           currency: 'INR',
           name: 'PayBridge',
           description: 'Subscription Payment',

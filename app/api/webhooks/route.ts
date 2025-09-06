@@ -1,12 +1,13 @@
 import Stripe from 'stripe';
-import { stripe } from '@/utils/stripe/config';
+import { stripe } from '@/core/payments/adapters/stripe/config';
 import {
   upsertProductRecord,
   upsertPriceRecord,
   manageSubscriptionStatusChange,
   deleteProductRecord,
   deletePriceRecord
-} from '@/utils/supabase/admin';
+} from '@/core/users/supabase/admin';
+import { saveTransaction } from '@/core/payments/transactions';
 
 const relevantEvents = new Set([
   'product.created',
@@ -56,15 +57,33 @@ export async function POST(req: Request) {
           break;
         case 'customer.subscription.created':
         case 'customer.subscription.updated':
-        case 'customer.subscription.deleted':
+        case 'customer.subscription.deleted': {
           const subscription = event.data.object as Stripe.Subscription;
           await manageSubscriptionStatusChange(
             subscription.id,
             subscription.customer as string,
             event.type === 'customer.subscription.created'
           );
+          // Save transaction
+          try {
+            await saveTransaction({
+              id: subscription.id,
+              gateway: 'stripe',
+              gateway_transaction_id: subscription.id,
+              user_id: subscription.customer as string,
+              subscription_id: subscription.id,
+              amount: subscription.items.data[0]?.price.unit_amount?.toString(),
+              currency: subscription.items.data[0]?.price.currency,
+              status: subscription.status,
+              type: 'subscription',
+              raw: subscription
+            });
+          } catch (err) {
+            console.error('[Stripe] Failed to save subscription transaction:', err);
+          }
           break;
-        case 'checkout.session.completed':
+        }
+        case 'checkout.session.completed': {
           const checkoutSession = event.data.object as Stripe.Checkout.Session;
           if (checkoutSession.mode === 'subscription') {
             const subscriptionId = checkoutSession.subscription;
@@ -73,8 +92,26 @@ export async function POST(req: Request) {
               checkoutSession.customer as string,
               true
             );
+            // Save transaction
+            try {
+              await saveTransaction({
+                id: checkoutSession.id,
+                gateway: 'stripe',
+                gateway_transaction_id: checkoutSession.id,
+                user_id: checkoutSession.customer as string,
+                subscription_id: subscriptionId as string,
+                amount: checkoutSession.amount_total?.toString(),
+                currency: checkoutSession.currency || undefined,
+                status: checkoutSession.status || undefined,
+                type: 'checkout',
+                raw: checkoutSession
+              });
+            } catch (err) {
+              console.error('[Stripe] Failed to save checkout transaction:', err);
+            }
           }
           break;
+        }
         default:
           throw new Error('Unhandled relevant event!');
       }
